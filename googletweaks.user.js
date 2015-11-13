@@ -299,9 +299,15 @@ function wrap(x)
 	replaceElement(".searchresult", "dt");
 }
 
-function main()
+function removeEventListeners()
 {
 	unRegisterAllEventListeners(document.body);
+	//xlog("event listeners removed", "h3", true);
+}
+
+function main()
+{
+	setTimeout(removeEventListeners, 1000);
 	
 	var newBody, rs, rsw, inputs, s, i, head;
 	
@@ -338,9 +344,10 @@ function main()
 	while(head.firstChild)
 		head.removeChild(head.firstChild);
 	document.title = "Google: " + s;
-	replaceElement(".s", "blockquote");
+	replaceElement(".s", "dd");
 	deleteEmptyElements("div");
 
+	del("style");
 	insertStyleNegative();
 	var styleString = 'dt { display: table; width: 100%; background: #111 !important; margin: 0 0 2px 0 !important; }' + 
 	'h3 { display: table-cell; vertical-align: top; width: 40%; }' + 
