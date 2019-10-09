@@ -123,20 +123,25 @@ function main()
 	{
 		const resultWrapper = createElement("blockquote");
 		const resultLink = results[i].querySelector("h3").parentNode;
+		if(!resultLink)
+			continue;
 		const resultDesc = results[i].querySelector(".s");
-		const resultLinkText = resultLink.querySelector(".ellip").textContent;
+		const resultLinkTextElement = resultLink.querySelector(".ellip");
+		const resultLinkText = resultLinkTextElement ? resultLinkTextElement.textContent : resultLink.textContent;
 		const resultLinkReplacement = createElement("a", { href: resultLink.href, textContent: resultLinkText });
 		const resultLinkReplacementWrapper = createElement("h3");
 		resultLinkReplacementWrapper.appendChild(resultLinkReplacement);
 		resultWrapper.appendChild(resultLinkReplacementWrapper);
-		resultWrapper.appendChild(createElement("h6", { textContent: resultLink }));
-		resultWrapper.appendChild(resultDesc);
+		resultWrapper.appendChild(createElement("h6", { textContent: resultLinkText }));
+		if(resultDesc)
+			resultWrapper.appendChild(resultDesc);
 		replacementContainer.appendChild(resultWrapper);
 	}
 	const navigation = getOne("#nav").cloneNode(true);
 	document.body.innerHTML = "";
 	document.body.appendChild(replacementContainer);
-	document.body.appendChild(navigation);
+	if(navigation)
+		document.body.appendChild(navigation);
 	document.body.className = "pad100";
 	del("img");
 	focusFirstResult();
