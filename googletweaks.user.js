@@ -122,17 +122,18 @@ function main()
 	for(let i = 0, ii = results.length; i < ii; i++)
 	{
 		const resultWrapper = createElement("blockquote");
-		const resultLink = results[i].querySelector("h3").parentNode;
+		const resultHeading = results[i].querySelector("h3");
+		const resultLink = resultHeading.parentNode;
 		if(!resultLink)
 			continue;
 		const resultDesc = results[i].querySelector(".s");
 		const resultLinkTextElement = resultLink.querySelector(".ellip");
-		const resultLinkText = resultLinkTextElement ? resultLinkTextElement.textContent : resultLink.textContent;
+		const resultLinkText = resultLinkTextElement ? resultLinkTextElement.textContent : resultHeading.textContent;
 		const resultLinkReplacement = createElement("a", { href: resultLink.href, textContent: resultLinkText });
 		const resultLinkReplacementWrapper = createElement("h3");
 		resultLinkReplacementWrapper.appendChild(resultLinkReplacement);
 		resultWrapper.appendChild(resultLinkReplacementWrapper);
-		resultWrapper.appendChild(createElement("h6", { textContent: resultLinkText }));
+		resultWrapper.appendChild(createElement("h6", { textContent: resultLink.href }));
 		if(resultDesc)
 			resultWrapper.appendChild(resultDesc);
 		replacementContainer.appendChild(resultWrapper);
