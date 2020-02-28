@@ -1,5 +1,5 @@
 // ==UserScript==
-// @name		   Google my tweaks
+// @name		   Google tweaks
 // @namespace	  google.com
 // @include		http://www.google.tld/*
 // @include		http://www.google.tld
@@ -112,7 +112,10 @@ function createElement(tag, props)
 
 function main()
 {
-	if(location.href.toString().indexOf("isch") !== -1) return;	 // Don't run on Google Image Search results
+	//	Don't run on Google Image Search results
+	if(~location.href.indexOf("tbm=isch"))
+		return;
+	console.log("Google tweaks");
 
 	cleanupHead();
 	cleanupLinks();
@@ -129,7 +132,7 @@ function main()
 		const resultDesc = results[i].querySelector(".s");
 		const resultLinkTextElement = resultLink.querySelector(".ellip");
 		const resultLinkText = resultLinkTextElement ? resultLinkTextElement.textContent : resultHeading.textContent;
-		const resultLinkReplacement = createElement("a", { href: resultLink.href, textContent: resultLinkText });
+		const resultLinkReplacement = createElement("a", { href: resultLink.href.replace(/www\.reddit/, "old.reddit"), textContent: resultLinkText.replace(/www\.reddit/, "old.reddit") });
 		const resultLinkReplacementWrapper = createElement("h3");
 		resultLinkReplacementWrapper.appendChild(resultLinkReplacement);
 		resultWrapper.appendChild(resultLinkReplacementWrapper);
@@ -143,7 +146,7 @@ function main()
 	document.body.appendChild(replacementContainer);
 	if(navigation)
 		document.body.appendChild(navigation);
-	document.body.className = "pad100";
+	document.body.className = "pad100 xwrap";
 	del("img");
 	focusFirstResult();
 }
