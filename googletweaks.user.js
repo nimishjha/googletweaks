@@ -112,16 +112,19 @@ function createElement(tag, props)
 
 function main()
 {
-	//	Don't run on Google Image Search results
-	if(~location.href.indexOf("tbm=isch"))
+	//	Only run on Google search results
+	if(~location.href.indexOf("tbm=isch") || location.href.indexOf("/search?") === -1)
 		return;
-	console.log("Google tweaks");
 
 	cleanupHead();
 	cleanupLinks();
 
+	const SELECTOR_PAGINATION = "#foot";
+
 	const replacementContainer = createElement("div", { id: "replacer" });
 	const results = get(".rc");
+	if(!results)
+		return;
 	for(let i = 0, ii = results.length; i < ii; i++)
 	{
 		const resultWrapper = createElement("blockquote");
@@ -141,14 +144,17 @@ function main()
 			resultWrapper.appendChild(resultDesc);
 		replacementContainer.appendChild(resultWrapper);
 	}
-	const navigation = getOne("#nav").cloneNode(true);
-	document.body.innerHTML = "";
-	document.body.appendChild(replacementContainer);
-	if(navigation)
-		document.body.appendChild(navigation);
-	document.body.className = "pad100 xwrap";
-	del("img");
-	focusFirstResult();
+	const pagination = getOne(SELECTOR_PAGINATION);
+	if(pagination)
+	{
+		document.body.innerHTML = "";
+		document.body.appendChild(replacementContainer);
+		document.body.appendChild(pagination.cloneNode(true));
+		document.body.className = "pad100 xwrap";
+		del("img");
+		del(SELECTOR_PAGINATION + " h1");
+		focusFirstResult();
+	}
 }
 
 main();
